@@ -1,0 +1,52 @@
+{
+    "name": "aura/auth",
+    "type": "library",
+    "description": "Provides a unified interface to authenticate a user with local or remote authentication systems.",
+    "keywords": [
+        "auth",
+        "authenticate",
+        "authentication"
+    ],
+    "homepage": "https://github.com/auraphp/Aura.Auth",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Aura.Auth Contributors",
+            "homepage": "https://github.com/auraphp/Aura.Auth/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aura\\Auth\\": "src/",
+            "Aura\\Auth\\_Config\\": "config/"
+        }
+    },
+    "extra": {
+        "aura": {
+            "type": "library",
+            "config": {
+                "common": "Aura\\Auth\\_Config\\Common"
+            }
+        }
+    },
+
+    "minimum-stability": "stable",
+    "require-dev": {
+        "acclimate/container": "^2",
+        "phpunit/phpunit": "~8",
+        "vimeo/psalm": "~v4.15"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Auth\\": "tests/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
+        }
+    },
+    "suggest": {
+        "ext/ldap": "For LDAP integration.",
+        "ext/imap": "For IMAP/POP/NNTP integration."
+    }
+}

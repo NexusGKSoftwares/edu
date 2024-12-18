@@ -1,0 +1,73 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+
+{% extends "components/dataTable.twig.html" %}
+
+{% block title %}
+    
+{% endblock title %}
+
+{% block table %}
+
+    <header class="relative w-full flex justify-between items-end">
+        {% block header %}
+            {% if table.getTitle %}
+                <h2>{{ table.getTitle|raw }}</h2>
+            {% endif %}
+
+            {% if table.getHeader %}
+            <div class="linkTop flex-1 flex justify-end items-end gap-2 mb-2 h-10 py-px">
+                {% for action in table.getHeader %}
+                    {{ action.getOutput|raw }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+        {% endblock header %}
+    </header>
+
+    {{ title }}
+
+    {% if rows is empty %}
+        <div class="h-48 rounded-sm border bg-gray-100 shadow-inner overflow-hidden">
+            {% block blankslate %}
+            {{ include('components/blankSlate.twig.html') }}
+            {% endblock blankslate %}
+        </div>
+    {% else %}
+    
+        {% for rowIndex, rowData in rows %}
+        
+            {% for heading, headingColumns in groups %}
+                {% if heading %}
+                    <h4>{{ __(heading) }}</h4>
+                {% endif %}
+
+                <div class="sm:grid {{ gridClass|default('grid-cols-3') }} rounded border bg-gray-100 text-xs text-gray-700">
+            
+                {% for columnIndex, column in headingColumns %}
+
+                    <div class="p-2 border-b -mb-px {{ column.getClass }}" 
+                        style="{{ column.getWidth != 'auto' ? 'width: ' ~ column.getWidth }}" >
+                        <span class="block text-sm font-bold mb-1">{{ column.getLabel | raw }}</span>
+                        <span class="block text-gray-700 overflow-x-auto">{{ column.getOutput(rowData) | raw }}</span>
+                    </div>
+
+                {% endfor %}
+                </div>
+            {% endfor %}
+
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endblock table %}
+

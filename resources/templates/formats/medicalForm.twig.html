@@ -1,0 +1,29 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+
+Page Foot: Outputs the contents of the HTML <head> tag. This includes 
+all stylesheets and scripts with a 'head' context.
+-->#}
+
+{% if gibbonPersonMedicalID %}
+
+    <i>{{ __('Medication') }}:</i> {{ formatUsing('yesNo', longTermMedication) }}<br/>
+
+    {% for field in customFields %}
+        {% if fields[field.gibbonCustomFieldID] %}
+        <i>{{ __(field.name) }}:</i> {{ fields[field.gibbonCustomFieldID] | raw }}<br/>
+        {% endif %}
+    {% endfor %}
+
+
+{% else %}
+
+    <span style="color: #ff0000; font-weight: bold">{{ __('No') }}</span>
+
+{% endif %}

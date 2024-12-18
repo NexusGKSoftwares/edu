@@ -1,0 +1,55 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+<!DOCTYPE html>
+<html {{ rightToLeft ? 'dir="rtl"' : '' }}>
+    <head>
+        {{ include('head.twig.html') }}
+    </head>
+    <body class="print">
+        <style>
+            table, a, .subdued, .text-gray-100, .text-gray-200, .text-gray-300, .text-gray-400  {
+                color: #000000 !important;
+            }
+        </style>
+        <div id="wrap-report" class="mx-auto {{ orientation == 'L' ? 'max-w-6xl' : 'max-w-3xl' }}">
+            {% if not hideHeader %}
+            <div id="header-report" class="flex items-center w-full my-6">
+                
+                <div id="header-logo" class="leading-none">
+                    <img class="block max-w-full" alt="{{ organisationNameShort }}" src="{{ absoluteURL }}/{{ organisationLogo|default("/themes/Default/img/logo.png") }}" width="400"/>
+                </div>
+
+                <div id="header-text" class="w-3/4 text-xs leading-tight pl-10">
+                    {{  __('This printout contains information that is the property of %1$s. If you find this report, and do not have permission to read it, please return it to %2$s (%3$s). In the event that it cannot be returned, please destroy it.')|format(organisationName, organisationAdministratorName, organisationAdministratorEmail) }}
+                </div>
+            </div>
+            {% else %}
+                <br/>
+            {% endif %}
+
+            <div id="content-wrap-report" class="w-full max-w-full">
+
+                {% for type, alerts in page.alerts %}
+                    {% for text in alerts %}
+                        <div class="{{ type }}">{{ text|raw }}</div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% if isLoggedIn %}
+                    {{ content|join("\n")|raw }}
+                {% endif %}
+            </div>
+
+            <div id="footer-report" class="pt-8 text-xs text-right italic">
+                {{ __('Created by %1$s (%2$s) at %3$s on %4$s.')|format(username, organisationNameShort, time, date) }}
+            </div>
+        </div>
+    </body>
+</html>

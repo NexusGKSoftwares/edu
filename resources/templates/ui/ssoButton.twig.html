@@ -1,0 +1,32 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+
+{% if clientName %}
+<a target="_top" class="login block mb-4" href="{{ authURL }}" onclick="addOAuth2LoginParams(this)">
+    <button type="button" class="w-full bg-white rounded-md shadow border border-gray-500 flex items-center px-2 py-1 mb-2 text-gray-600 hover:shadow-md hover:border-blue-600 hover:text-blue-600">
+        <img class="w-10 h-10" src="themes/{{ gibbonThemeName }}/img/{{ service }}-login.svg">
+        <span class="flex-grow text-lg">{{ __('Sign in with {service}', {'service': clientName } ) }}</span>
+    </button>
+</a>
+
+{% else %}
+    <script>
+    function addOAuth2LoginParams(element)
+    {
+        $(element).attr('href', function() {
+            if ($('#gibbonSchoolYearIDOAuth2').is(':visible')) {
+                var googleSchoolYear = $('#gibbonSchoolYearIDOAuth2').val();
+                var googleLanguage = $('#gibboni18nIDOAuth2').val();
+                return this.href.replace('&options=', '&options='+googleSchoolYear+':'+googleLanguage+':');
+            }
+        });
+    }
+    </script>
+{% endif %}

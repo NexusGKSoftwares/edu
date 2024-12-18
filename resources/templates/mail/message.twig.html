@@ -1,0 +1,30 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+{% extends "mail/email.twig.html" %}
+
+{% block body %}
+
+    {{ body|raw }}
+
+    {% if details|length > 0 %}
+        <hr style="border:none;border-bottom:1px solid #ececec;margin:1.5rem 0;width:100%;">
+
+        <ul>
+            {% for label, value in details %}
+            <li style="padding: 3px 0px;">
+                <b>{{ label }}</b>: {{ value|raw }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <hr style="border:none;border-bottom:1px solid #ececec;margin:1.5rem 0;width:100%;">
+    {% endif %}
+
+{% endblock %}

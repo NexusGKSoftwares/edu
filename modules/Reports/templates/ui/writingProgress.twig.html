@@ -1,0 +1,32 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+
+{% if totalCount > 0 %}
+<div class="flex items-center">
+    {% set percent = ((progressCount / totalCount) * 100)|round %}
+    {% set colour = progressColour|default('purple') %}
+
+    <div class="{{ width|default('flex-1') }} h-6 border bg-gray-100 border-{{ colour }}-600 flex" title="{{ percent }}% {{ progressName ? progressName : __('Complete') }}">
+        <div class="bg-{{ colour }}-{{ colour == 'purple' ? '400' : '300' }} h-full" style="width: {{ percent }}%"></div>
+
+        {% if partialCount > 0 %}
+            {% set percent = ((partialCount / totalCount) * 100)|round %}
+            {% set colour = partialColour|default('gray') %}
+            <div class="bg-{{ colour }}-300 h-full" style="width: {{ percent }}%" title="{{ percent }}% {{ __('Pending')}}"></div>
+        {% endif %}
+    </div>
+
+    <span class="ml-2 text-xxs text-gray-600" title="{{ leftCount > 0 ? __('Progress count includes students who have left.') }}">
+        {{ progressCount }}/{{ totalCount }} 
+
+        {% if leftCount > 0 %}<br/><span class="text-red-700 font-bold" style="font-size: 80%">(+{{ leftCount }} {{ __('Left') }})</span>{% endif %}
+    </span>
+</div>
+{% endif %}

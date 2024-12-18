@@ -1,0 +1,106 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+
+TODO: add template variable details.
+-->#}
+
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ rightToLeft ? 'rtl' : 'ltr' }}">
+    <head>
+        {% block head %}
+        {{ include('head.twig.html') }}
+        {% endblock head %}
+    </head>
+    <body style="{{ bodyBackground ? bodyBackground : "background: url('" ~ absoluteURL ~ "/themes/Legacy/img/backgroundPage.jpg') repeat fixed center top #A88EDB;"}}">
+        <div id="wrapOuter" class="sm:px-6">
+            <div class="mx-auto max-w-6xl text-right text-white text-xs md:text-sm px-2 xl:px-0 {{ currentUser.houseLogo ? 'mt-2' : 'mt-6' }}">
+                {% if currentUser %}
+                    {% if currentUser.url %}<a href="{{ currentUser.url }}" class="link-white">{% endif %}
+                        {{- currentUser.name -}}
+                    {% if currentUser.url %}</a>{% endif %} · 
+                {% endif %}
+                
+                {% for link in minorLinks %}
+                    {{ link.prepend }}
+                    <a href="{{ link.url }}" class="link-white {{ loop.count > 3 ? 'hidden sm:block' }}" target="{{ link.target }}">
+                        {{- link.name|raw -}}
+                    </a>
+                    {{ link.append }}
+
+                    {% if not loop.last %} · {% endif %}
+                {% endfor %}
+
+                {% if currentUser.houseName and currentUser.houseLogo %}
+                    <img class="ml-1 -mt-4 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16" title="{{ currentUser.houseName }}" style="vertical-align: -75%;" src="{{ absoluteURL }}/{{ currentUser.houseLogo }}"/>
+                {% endif %}
+            </div>
+
+            <div id="wrap" class="mx-auto max-w-6xl m-2 shadow-container rounded">
+                {% block header %}
+                <div id="header" class="relative bg-white flex justify-between items-center rounded-t h-24 sm:h-32">
+
+                    <a id="header-logo" class="block max-w-xs sm:max-w-full leading-none" href="{{ absoluteURL }}">
+                        <img class="block max-w-full" alt="{{ organisationName }} Logo" src="{{ absoluteURL }}/{{ organisationLogo|default("/themes/Default/img/logo.png") }}"  style="max-height:100px;"/>
+                    </a>
+
+                    <div class="flex-grow flex justify-end">
+                        {{ fastFinder|raw }}
+                    </div>
+                </div>
+
+                <nav id="header-menu" class="w-full bg-gray-200 justify-between">
+                    {{ include('menu.twig.html') }}
+                </nav>
+
+                {% endblock %}
+
+                <div id="content-wrap" class="relative w-full min-h-1/2 flex content-start {{ sidebar ? 'flex-wrap lg:flex-no-wrap' : 'flex-col' }} lg:flex-row-reverse bg-transparent-100 clearfix">
+
+                    {% if sidebar %}
+                        <div id="sidebar" class="w-full lg:w-sidebar px-6 pb-6 lg:border-l">
+                            {% block sidebar %}
+                            {{ include('navigation.twig.html') }}
+                            {% endblock sidebar %}
+                        </div>
+                        <br style="clear: both">
+                    {% endif %}
+
+                    <div id="content" class="w-full max-w-full {{ not sidebar ?'pt-0 sm:pt-6' }} lg:flex-1  p-6 lg:pt-0 {{ not menuModule or not preventOverflow ? 'overflow-x-scroll lg:overflow-x-auto' : 'overflow-x-auto xl:overflow-x-unset' }} ">
+
+                        {% block page %}
+
+                        {{ include('page.twig.html') }}
+
+                        {{ content|join("\n")|raw }}
+
+                        {% endblock %}
+                    </div>
+
+                    
+                </div>
+
+                {% block footer %}
+                <div class="relative bg-transparent-600 text-white text-center text-sm p-6 mb-10 leading-normal rounded-b">
+                    {{ include('footer.twig.html') }}
+
+                    <img class="absolute right-0 top-0 -mt-2 sm:mr-0 md:mr-12 opacity-75 hidden sm:block" alt="Logo Small" src="{{ absoluteURL }}/themes/{{ gibbonThemeName|default("Default") }}/img/logoFooter.png"/>
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+
+        {% block privacy %}
+        {{ include('privacy.twig.html') }}
+        {% endblock privacy %}
+
+        {% block foot %}
+        {{ include('foot.twig.html') }}
+        {% endblock foot %}
+    </body>
+</html>

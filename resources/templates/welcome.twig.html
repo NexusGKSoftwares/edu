@@ -1,0 +1,113 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+-->#}
+{% import _self as homepage  %}
+
+<div class="flex flex-wrap mb-4 -mx-2 items-stretch ">
+    <div class="w-full mx-2 my-2">
+        <h2>{{ __('Welcome') }}</h2>
+        <p>
+        {{ indexText | raw }}
+        </p>
+    </div>
+
+    {% if admissionsEnabled %}
+        {{ homepage.card(
+            __(admissionsLinkName), 
+            __(admissionsLinkText), 
+            "/?q=/modules/Admissions/applicationFormSelect.php",
+            organisationName,
+            'first'
+        ) }}
+
+    {% elseif publicStudentApplications %}
+        {{ homepage.card(
+            __('Student Applications'), 
+            __('Parents of students interested in study at %1$s may use our %2$s online form%3$s to initiate the application process.'), 
+            "/?q=/modules/Students/applicationForm.php",
+            organisationName,
+            'first'
+        ) }}
+    {% endif %}
+
+    {% if publicStaffApplications %}
+        {{ homepage.card(
+            __('Staff Applications'), 
+            __('Individuals interested in working at %1$s may use our %2$s online form%3$s to view job openings and begin the recruitment process.'),
+            "/?q=/modules/Staff/applicationForm_jobOpenings_view.php",
+            organisationName,
+            'first'
+        ) }}
+    {% endif %}
+
+    {% if publicRegistration %}
+        {{ homepage.card(
+            __('Register'), 
+            __('Join our learning community.') ~ ' ' ~ __("It's free!"), 
+            "/?q=/publicRegistration.php"
+        ) }}
+
+    {% endif %}
+
+    {% if makeDepartmentsPublic %}
+        {{ homepage.card(
+            __('Departments'), 
+            __('Please feel free to %1$sbrowse our departmental information%2$s, to learn more about %3$s.'),
+            "/?q=/modules/Departments/departments.php",
+            organisationName,
+            'second'
+        ) }}
+    {% endif %}
+
+    {% if makeUnitsPublic %}
+        {{ homepage.card(
+            __('Learn With Us'), 
+            __('We are sharing some of our units of study with members of the public, so you can learn with us. Feel free to %1$sbrowse our public units%2$s.'),
+            "/?q=/modules/Planner/units_public.php&sidebar=false",
+            organisationName,
+            'second'
+        ) }}
+    {% endif %}
+
+    {% for hook in indexHooks %}
+        {{ homepage.card(hook.title, hook.text, hook.url, organisationName) }}
+    {% endfor %}
+
+    {% if privacyPolicy %}
+        {{ homepage.card(
+            __('Privacy Policy'), 
+            __('Read more about how personal data is used, stored and retained at %1$s.'),
+            "/?q=privacyPolicy.php",
+            organisationName,
+            'first'
+        ) }}
+    {% endif %}
+</div>
+{% macro card(name, content, url = '', organisationName, orgNamePos = 'first') %}
+
+
+    <div class="w-full sm:w-1/2 px-2 pb-4">
+        <a href="{{ absoluteURL ~ url }}" class="block border shadow-sm rounded bg-white h-full text-gray-800 hover:shadow-md hover:text-{{ themeColour }}-800 hover:border-{{ themeColour }}-600">
+            <div class="block m-0 pt-4 px-4 text-base uppercase font-bold font-sans tracking-tight">
+                {{ name }}
+                {{ icon('basic', 'chevron-double-right', 'size-6 float-right -mt-px fill-current') }}
+            </div>
+            <p class="mb-1 p-4 text-gray-700 leading-tight">
+                {% if orgNamePos == 'first' %}
+                    {{ content|format(organisationName, '', '')|raw }}
+                {% elseif orgNamePos == 'second' %}
+                    {{ content|format('', '', organisationName)|raw }}
+                {% else %}
+                    {{ content|raw }}
+                {% endif %}
+            </p>
+        </a>
+    </div>
+
+{% endmacro card %}

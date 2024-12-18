@@ -1,0 +1,32 @@
+{#<!--
+Gibbon: the flexible, open school platform
+Founded by Ross Parker at ICHK Secondary. Built by Ross Parker, Sandra Kuipers and the Gibbon community (https://gibbonedu.org/about/)
+Copyright © 2010, Gibbon Foundation
+Gibbon™, Gibbon Education Ltd. (Hong Kong)
+
+This is a Gibbon template file, written in HTML and Twig syntax.
+For info about editing, see: https://twig.symfony.com/doc/2.x/
+
+Page Foot: Outputs the contents of the HTML <head> tag. This includes 
+all stylesheets and scripts with a 'head' context.
+-->#}
+
+{% for family in families %}
+
+    {% if loop.length > 1 %}
+        <u>{{ family.name }}</u><br/>
+    {% endif %}
+
+    {% if includeAddressName %}
+        {{ family.nameAddress }}<br/>
+    {% endif %}
+
+    {{ formatUsing('address', family.homeAddress, family.homeAddressDistrict, family.homeAddressCountry) }}
+
+    {% if not loop.last %}<br/><br/>{% endif %}
+
+{% else %}
+
+    {{ formatUsing('address', person.address1, person.address1District, person.address1Country) }}
+
+{% endfor %}
